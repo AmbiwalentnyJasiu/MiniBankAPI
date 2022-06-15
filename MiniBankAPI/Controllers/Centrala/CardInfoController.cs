@@ -4,6 +4,7 @@ using System.Linq;
 using MiniBankAPI.Models.Centrala;
 using System.Text.RegularExpressions;
 using MiniBankAPI.Interfaces.Centrala;
+using System;
 
 namespace MiniBankAPI.Controllers.Centrala {
     [Route("api/centrala/[controller]")]
@@ -24,11 +25,11 @@ namespace MiniBankAPI.Controllers.Centrala {
         }
 
         [HttpGet("id")]
-        public IActionResult Get(string cardNumber) {
+        public IActionResult Get(string cardNumber = "dupka") {
             if (!ValidateCN(cardNumber))
                 return BadRequest("Incorrect card number");
 
-            var card = _service.GetByCardNumber(cardNumber);
+            var card = _service.GetById(cardNumber);
 
             if (card == null)
                 return NotFound();
@@ -54,6 +55,12 @@ namespace MiniBankAPI.Controllers.Centrala {
         [HttpPatch]
         public IActionResult Update([FromBody] CardInfoModel card) {
 
+            if(card.CardNumber == null)
+                return BadRequest("Missing CardNumber");
+
+            if (!ValidateCN(card.CardNumber))
+                return BadRequest("Incorrect CardNumber");
+
             if (card.ValidUntil != null) {
                 if (!ValidateVU(card.ValidUntil))
                     return BadRequest("Incorrect ValidUntil");
@@ -69,7 +76,7 @@ namespace MiniBankAPI.Controllers.Centrala {
                     return BadRequest("Incorrect CvcCode");
             }
 
-            var updated = _service.UpdateByCardNumber(card);
+            var updated = _service.Update(card);
 
             if (updated == null)
                 return NotFound();
@@ -91,7 +98,8 @@ namespace MiniBankAPI.Controllers.Centrala {
         }
 
         private bool ValidateCN(string cardNumber) => Regex.IsMatch(cardNumber, @"^\d{16,16}$");
-        private bool ValidateVU(string validUntil) => Regex.IsMatch(validUntil, @"^[0-1]\d\/\d{2,2}$");
+        private bool ValidateVU(string validUntil) => Regex.IsMatch(validUntil, @"^[0-1]\d\/\d{2,2}$")
+            && Convert.ToInt32(validUntil.Split('/')[0]) > 0 && Convert.ToInt32(validUntil.Split('/')[0]) < 13;
         private bool ValidateCO(string cardOwner) => Regex.IsMatch(cardOwner, @"^[A-Z][a-z]{2,29} [A-Z][a-z]{2,49}$");
         private bool ValidateCC(string cvcCode) => Regex.IsMatch(cvcCode, @"^[0-9]{3,3}$");
     }

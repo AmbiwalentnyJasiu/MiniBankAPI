@@ -1,10 +1,7 @@
 ﻿using MiniBankAPI.Interfaces.Centrala;
 using MiniBankAPI.Models.Centrala;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniBankAPITests.Fakers.Centrala {
     class CardInfoServiceFake : ICardInfoService {
@@ -34,7 +31,7 @@ namespace MiniBankAPITests.Fakers.Centrala {
         public CardInfoModel UpdateByCardNumber(CardInfoModel card) {
             var cardOld = _cards.Where(c => c.CardNumber == card.CardNumber).FirstOrDefault();
 
-            if (cardOld == null)
+            if(cardOld == null)
                 return null;
             _cards.Remove(cardOld);
             _cards.Add(card);

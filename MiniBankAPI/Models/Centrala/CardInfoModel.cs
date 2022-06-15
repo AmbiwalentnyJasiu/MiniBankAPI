@@ -24,5 +24,17 @@ namespace MiniBankAPI.Models.Centrala {
         }
 
         public CardInfoModel() { }
+
+        public void Update(CardInfoModel other){
+            if (other.CardOwner != null)
+                CardOwner = other.CardOwner;
+
+            if (other.CvcCode != null)
+                //        cardOld.CvcCode = card.CvcCode;
+                //    if (card.ValidUntil != null)
+                //        cardOld.ValidUntil = card.ValidUntil
+                ValidUntil = other.ValidUntil;
+            CvcCode = other.CvcCode;
+        }
     }
 }

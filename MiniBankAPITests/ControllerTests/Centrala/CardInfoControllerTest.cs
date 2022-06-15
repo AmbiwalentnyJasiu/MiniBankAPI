@@ -33,8 +33,8 @@ namespace MiniBankAPITests.ControllerTests.Centrala {
 
             var cards = Assert.IsType<List<CardInfoModel>>(result.Value);
             Assert.Equal(3, cards.Count);
-        } 
-        
+        }
+
         [Fact]
         public void GetByCardNumber_ReturnNotFound() {
             var number = "0000000000000000";
@@ -175,5 +175,78 @@ namespace MiniBankAPITests.ControllerTests.Centrala {
 
             Assert.IsType<NotFoundResult>(result);
         }
+
+        [Fact]
+        public void Update_InvalidCvcCode_ReturnsBadRequest() {
+            var incorrectDataCard = new CardInfoModel() {
+                CardNumber = "1111222211112222",
+                CvcCode = "123s",
+                CardOwner = "Jozef Gozka",
+                ValidUntil = "10/22"
+            };
+
+            var result = _controller.Update(incorrectDataCard);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public void Update_InvalidCardOwner_ReturnsBadRequest() {
+            var incorrectDataCard = new CardInfoModel() {
+                CardNumber = "1111222211112222",
+                CvcCode = "123",
+                CardOwner = "Jozef gozka",
+                ValidUntil = "10/22"
+            };
+
+            var result = _controller.Update(incorrectDataCard);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public void Update_InvalidValidUntil_ReturnsBadRequest() {
+            var incorrectDataCard = new CardInfoModel() {
+                CardNumber = "1111222211112222",
+                CvcCode = "123",
+                CardOwner = "Jozef Gozka",
+                ValidUntil = "14/22"
+            };
+
+            var result = _controller.Update(incorrectDataCard);
+
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public void Update_ValidData_ReturnsOk() {
+            var correctDataCard = new CardInfoModel() {
+                CardNumber = "1111222211112222",
+                CvcCode = "123",
+                CardOwner = "Jozef Gozka",
+                ValidUntil = "10/22"
+            };
+
+            var result = _controller.Update(correctDataCard);
+
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        [Fact]
+        public void Update_ValidData_ReturnsOkCorrectCard() {
+            var correctDataCard = new CardInfoModel() {
+                CardNumber = "1111222211112222",
+                CvcCode = "123",
+                CardOwner = "Jozef Gozka",
+                ValidUntil = "10/22"
+            };
+
+            var result = (_controller.Update(correctDataCard) as OkObjectResult).Value as CardInfoModel;
+
+            Assert.IsType<CardInfoModel>(result);
+
+            Assert.Equal("Jozef Gozka", result.CardOwner);
+        }
     }
 }
+

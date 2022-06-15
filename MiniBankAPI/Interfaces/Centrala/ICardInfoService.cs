@@ -5,7 +5,7 @@ namespace MiniBankAPI.Interfaces.Centrala {
     public interface ICardInfoService {
         IEnumerable<CardInfoModel> GetAllItems();
         CardInfoModel Add(CardInfoModel cardInfo);
-        CardInfoModel GetByCardNumber(string cardNumber);
-        CardInfoModel UpdateByCardNumber(CardInfoModel card);
+        CardInfoModel GetById(string cardNumber);
+        CardInfoModel Update(CardInfoModel card);
     }
 }
