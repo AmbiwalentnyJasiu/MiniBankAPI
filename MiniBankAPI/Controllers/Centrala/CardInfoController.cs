@@ -19,12 +19,12 @@ namespace MiniBankAPI.Controllers.Centrala {
         }
 
         [HttpGet]
-        public IActionResult GetAllCardInfos() {
+        public IActionResult Get() {
            return Ok(_service.GetAllItems());
         }
 
         [HttpGet("id")]
-        public IActionResult GetCardInfo(string cardNumber) {
+        public IActionResult Get(string cardNumber) {
             if (!ValidateCN(cardNumber))
                 return BadRequest("Incorrect card number");
 
@@ -36,23 +36,12 @@ namespace MiniBankAPI.Controllers.Centrala {
             return Ok(card);
         }
 
-        //[HttpPost]
-        //public IActionResult PostCardInfo(string cardNumber, string validUntil, string cardOwner, string cvcCode) {
-        //    var newCard = new CardInfoModel(cardNumber, validUntil, cardOwner, cvcCode);
-        //    var cards = db.dataContext.GetTable<CardInfoModel>();
-        //    bool result = false;
-        //    if (ValidateInput(cardNumber, validUntil, cardOwner, cvcCode)) {
-        //        cards.InsertOnSubmit(newCard);
-        //        result = true;
-        //    }
-
-        //    db.dataContext.SubmitChanges();
-        //    return result ? Ok() : BadRequest("Incorrect data");
-        //}
-
         [HttpPost]
-        public IActionResult PostCardInfo([FromBody] CardInfoModel card) {
-           
+        public IActionResult Post([FromBody] CardInfoModel card) {
+            if (card.CardNumber == null || card.CardOwner == null ||
+                card.CvcCode == null || card.ValidUntil == null)
+                return BadRequest("Missing data");
+
             if (!ValidateInput(card)) {
                 return BadRequest("Incorrect input");
             }
@@ -63,7 +52,7 @@ namespace MiniBankAPI.Controllers.Centrala {
         }
 
         [HttpPatch]
-        public IActionResult UpdateCardInfo([FromBody] CardInfoModel card) {
+        public IActionResult Update([FromBody] CardInfoModel card) {
 
             if (card.ValidUntil != null) {
                 if (!ValidateVU(card.ValidUntil))
@@ -101,9 +90,9 @@ namespace MiniBankAPI.Controllers.Centrala {
             return cNumberMatch && vUntilMatch && cOwnerMatch && cCodeMatch;
         }
 
-        private bool ValidateCN(string cardNumber) => Regex.Match(cardNumber, @"^\d{16,16}$").Success;
-        private bool ValidateVU(string validUntil) => Regex.Match(validUntil, @"^[0-1]\d\/\d{2,2}$").Success;
-        private bool ValidateCO(string cardOwner) => Regex.Match(cardOwner, @"^[A-Z][a-z]{2,29} [A-Z][a-z]{2,49}$").Success;
-        private bool ValidateCC(string cvcCode) => Regex.Match(cvcCode, @"^[0-9]{3,3}$").Success;
+        private bool ValidateCN(string cardNumber) => Regex.IsMatch(cardNumber, @"^\d{16,16}$");
+        private bool ValidateVU(string validUntil) => Regex.IsMatch(validUntil, @"^[0-1]\d\/\d{2,2}$");
+        private bool ValidateCO(string cardOwner) => Regex.IsMatch(cardOwner, @"^[A-Z][a-z]{2,29} [A-Z][a-z]{2,49}$");
+        private bool ValidateCC(string cvcCode) => Regex.IsMatch(cvcCode, @"^[0-9]{3,3}$");
     }
 }
