@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MiniBankAPITests.Fakers.Centrala {
-    class CardInfoServiceFake : ICardInfoService {
+    class CardInfoServiceFake : IService {
         private readonly List<CardInfoModel> _cards;
 
         public CardInfoServiceFake() {

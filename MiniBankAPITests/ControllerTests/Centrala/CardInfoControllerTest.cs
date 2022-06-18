@@ -13,7 +13,7 @@ using Xunit;
 namespace MiniBankAPITests.ControllerTests.Centrala {
     public class CardInfoControllerTest {
         private readonly CardInfoController _controller;
-        private readonly ICardInfoService _service;
+        private readonly IService _service;
 
         public CardInfoControllerTest() {
             _service = new CardInfoServiceFake();

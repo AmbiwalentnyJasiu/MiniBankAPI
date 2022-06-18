@@ -4,8 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using MiniBankAPI.Interfaces.Centrala;
-using MiniBankAPI.Services.Centrala;
+using MiniBankAPI.Interfaces;
+using MiniBankAPI.Services;
 
 namespace MiniBankAPI {
     public class Startup {
@@ -19,7 +19,6 @@ namespace MiniBankAPI {
         public void ConfigureServices(IServiceCollection services) {
 
             services.AddSingleton<IDbService, DbService>();
-            services.AddScoped<ICardInfoService, CardInfoService>();
             services.AddControllers();
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MiniBankAPI", Version = "v1" });
