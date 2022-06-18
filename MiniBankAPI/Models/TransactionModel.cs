@@ -18,7 +18,7 @@ namespace MiniBankAPI.Models {
         }
 
         public string ToString(bool mode) {
-            return $"{(mode ? ID + ", " : "")}'{SenderID}', {Amount}, '{DateSent}', '{ReceiverID}'";
+            return $"{(mode ? ID + ", " : "")}'{SenderID}', {Amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}, '{DateSent}', '{ReceiverID}'";
         }
     }
 }

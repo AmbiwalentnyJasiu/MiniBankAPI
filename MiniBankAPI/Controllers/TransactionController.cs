@@ -144,9 +144,9 @@ namespace MiniBankAPI.Controllers {
 
                 status = cmd.ExecuteNonQuery();
 
-                cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{trans.SenderID}', {-trans.Amount}", db);
+                cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{trans.SenderID}', {(-trans.Amount).ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}", db);
                 cmd.ExecuteNonQuery();
-                cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{trans.ReceiverID}', {trans.Amount}", db);
+                cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{trans.ReceiverID}', {trans.Amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}", db);
                 cmd.ExecuteNonQuery();
 
                 if (status == 1) {
@@ -172,7 +172,7 @@ namespace MiniBankAPI.Controllers {
         public IActionResult UpdateMoney(string accNumber, double amount) {
             int success;
             try {
-                var cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{accNumber}', {amount}", db);
+                var cmd = new SqlCommand($"EXEC dbo.UpdateMoney '{accNumber}', {amount.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}", db);
                 success = cmd.ExecuteNonQuery();
             }catch(Exception e) {
                 return BadRequest(e.Message);
