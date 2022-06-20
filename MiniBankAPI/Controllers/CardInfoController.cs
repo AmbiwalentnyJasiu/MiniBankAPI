@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MiniBankAPI.Controllers {
-    [Route("api/centrala/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CardInfoController : ControllerBase {
 

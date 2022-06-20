@@ -8,7 +8,7 @@ using MiniBankAPI.Interfaces;
 using System.Data.SqlClient;
 
 namespace MiniBankAPI.Controllers {
-    [Route("api/centrala/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AddressInfoController : ControllerBase {
 
